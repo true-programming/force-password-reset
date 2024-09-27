@@ -1,0 +1,31 @@
+{
+	"name": "trueprogramming/force-password-reset",
+	"type": "typo3-cms-extension",
+	"description": "Enables forcing password reset for fe_users",
+	"require": {
+		"typo3/cms-backend": "^12 || ^13",
+		"typo3/cms-felogin": "^12 || ^13",
+		"typo3/cms-frontend": "^12 || ^13"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "force_password_reset"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"Trueprogramming\\ForcePasswordReset\\": "Classes/"
+		}
+	},
+	"require-dev": {
+		"typo3/coding-standards": "^0.8.0",
+		"phpstan/phpstan": "^1.12",
+		"saschaegerer/phpstan-typo3": "^1.10"
+	},
+	"config": {
+		"allow-plugins": {
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
+		}
+	}
+}
