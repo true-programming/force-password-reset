@@ -7,7 +7,7 @@ if (!defined('TYPO3')) {
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 $additionalColumns = [
-    'tx_forcepasswordreset_force_password_reset' => [
+    \Trueprogramming\ForcePasswordReset\Constants::PASSWORD_RESET_FIELD_NAME => [
         'label' => 'Needs to reset password at next login',
         'exclude' => true,
         'config' => [
@@ -21,7 +21,7 @@ ExtensionManagementUtility::addTCAcolumns('fe_users', $additionalColumns);
 ExtensionManagementUtility::addFieldsToPalette(
     'fe_users',
     'forcepasswordreset',
-    'tx_forcepasswordreset_force_password_reset'
+    \Trueprogramming\ForcePasswordReset\Constants::PASSWORD_RESET_FIELD_NAME
 );
 ExtensionManagementUtility::addToAllTCAtypes(
     'fe_users',

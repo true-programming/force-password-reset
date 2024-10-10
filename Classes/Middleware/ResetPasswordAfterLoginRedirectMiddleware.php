@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Trueprogramming\ForcePasswordReset\Constants;
 use Trueprogramming\ForcePasswordReset\Settings\ForcePasswordSettings;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ResponseFactory;
@@ -58,7 +59,7 @@ class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
             ->executeQuery()
             ->fetchAssociative();
 
-        if ($user === false || $user['tx_forcepasswordreset_force_password_reset'] === 0) {
+        if ($user === false || $user[Constants::PASSWORD_RESET_FIELD_NAME] === 0) {
             return $handler->handle($request);
         }
 

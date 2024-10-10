@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Trueprogramming\ForcePasswordReset\Listener;
 
+use Trueprogramming\ForcePasswordReset\Constants;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\FrontendLogin\Event\PasswordChangeEvent;
@@ -20,7 +21,7 @@ class PasswordChangedListener
         $qb = $this->connectionPool->getQueryBuilderForTable('fe_users');
         $qb
             ->update('fe_users')
-            ->set('tx_forcepasswordreset_force_password_reset', 0)
+            ->set(Constants::PASSWORD_RESET_FIELD_NAME, 0)
             ->where(
                 $qb->expr()->eq('uid', $qb->createNamedParameter($user['uid'], Connection::PARAM_INT))
             )
