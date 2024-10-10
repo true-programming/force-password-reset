@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Trueprogramming\ForcePassword\Settings;
+namespace Trueprogramming\ForcePasswordReset\Settings;
 
 class ForcePasswordSettings
 {

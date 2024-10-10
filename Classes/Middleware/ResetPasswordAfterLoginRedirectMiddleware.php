@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Trueprogramming\ForcePassword\Settings\ForcePasswordSettings;
+use Trueprogramming\ForcePasswordReset\Settings\ForcePasswordSettings;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Routing\PageArguments;
