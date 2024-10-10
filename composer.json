@@ -2,6 +2,7 @@
 	"name": "trueprogramming/force-password-reset",
 	"type": "typo3-cms-extension",
 	"description": "Enables forcing password reset for fe_users",
+	"license": ["GPL-2.0-or-later"],
 	"require": {
 		"typo3/cms-backend": "^12 || ^13",
 		"typo3/cms-felogin": "^12 || ^13",
