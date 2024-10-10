@@ -20,8 +20,8 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
 {
-    private const string USERNAME_FORM_FIELD_NAME = 'user';
-    private const string FE_USER_TABLENAME = 'fe_users';
+    private const USERNAME_FORM_FIELD_NAME = 'user';
+    private const FE_USER_TABLENAME = 'fe_users';
 
     public function __construct(
         private readonly ConnectionPool $connectionPool,
