@@ -12,6 +12,6 @@ class ForcePasswordSettings
 
     public function getPasswordResetPage(): int
     {
-        return $this->rawSettings['passwordResetPage'];
+        return (int)$this->rawSettings['passwordResetPage'];
     }
 }
