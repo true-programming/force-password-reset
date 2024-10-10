@@ -13,3 +13,9 @@ services:
     tags:
       - name: event.listener
         identifier: 'trueprogramming-forcepasswordreset-paswordchanged'
+
+  Trueprogramming\ForcePasswordReset\Command\SetResetForAllUsersCommand:
+    tags:
+      - name: 'console.command'
+        command: 'forcepasswordreset:setResetForAllUsers'
+        description: 'Sets password reset for all frontend users in database'
