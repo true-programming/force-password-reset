@@ -30,6 +30,7 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
 {
     private const USERNAME_FORM_FIELD_NAME = 'user';
+    private const LOGINTYPE_FORM_FIELD_NAME = 'logintype';
     private const FE_USER_TABLENAME = 'fe_users';
 
     public function __construct(
@@ -40,9 +41,15 @@ class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $givenUserName = $request->getParsedBody()[self::USERNAME_FORM_FIELD_NAME] ?? null;
+        $parsedBody = $request->getParsedBody();
+        $givenUserName = $parsedBody[self::USERNAME_FORM_FIELD_NAME] ?? null;
+        $loginType = $parsedBody[self::LOGINTYPE_FORM_FIELD_NAME] ?? null;
 
-        if ($givenUserName === null) {
+        // Restricting to actual login attempts (logintype=login) means this code path
+        // is only reachable for requests that already passed TYPO3 core's FE login
+        // rate limiter in FrontendUserAuthenticator (see loginRateLimit / loginRateLimitInterval),
+        // which throttles per remote address before this middleware ever runs.
+        if ($givenUserName === null || $loginType !== 'login') {
             return $handler->handle($request);
         }
 
