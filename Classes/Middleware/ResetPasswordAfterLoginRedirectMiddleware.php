@@ -21,10 +21,9 @@ use Trueprogramming\ForcePasswordReset\Settings\ForcePasswordSettings;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Routing\PageArguments;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
@@ -36,7 +35,6 @@ class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly ConnectionPool $connectionPool,
         private readonly ResponseFactory $responseFactory,
-        private readonly FrontendUserAuthentication $frontendUserAuthentication
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -64,12 +62,15 @@ class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
+        /** @var FrontendUserAuthentication $frontendUser */
+        $frontendUser = $request->getAttribute('frontend.user');
+
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::FE_USER_TABLENAME);
         $user = $queryBuilder
             ->select('*')
             ->from(self::FE_USER_TABLENAME)
             ->where(
-                $queryBuilder->expr()->eq($this->frontendUserAuthentication->username_column, $queryBuilder->createNamedParameter($givenUserName))
+                $queryBuilder->expr()->eq($frontendUser->username_column, $queryBuilder->createNamedParameter($givenUserName))
             )
             ->executeQuery()
             ->fetchAssociative();
@@ -81,17 +82,18 @@ class ResetPasswordAfterLoginRedirectMiddleware implements MiddlewareInterface
         /** @var SiteLanguage $language */
         $language = $request->getAttribute('language');
 
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uri = $uriBuilder
-            ->setTargetPageUid($pluginSettings->getPasswordResetPage())
-            ->setLanguage((string)$language->getLanguageId())
-            ->uriFor(
-                'recovery',
-                [],
-                'PasswordRecovery',
-                'Felogin',
-                'Login'
-            );
+        /** @var Site $site */
+        $site = $request->getAttribute('site');
+        $uri = (string)$site->getRouter()->generateUri(
+            $pluginSettings->getPasswordResetPage(),
+            [
+                '_language' => $language,
+                'tx_felogin_login' => [
+                    'action' => 'recovery',
+                    'controller' => 'PasswordRecovery',
+                ],
+            ]
+        );
 
         return $this->responseFactory->createResponse(307)->withHeader('Location', $uri);
     }
